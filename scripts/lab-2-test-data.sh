@@ -1,10 +1,10 @@
 #!/bin/bash
 KEY=PK
 
-aws dynamodb scan --table-name $TABLE --attributes-to-get "$KEY" \
+aws dynamodb scan --region eu-west-2 --table-name $TABLE --attributes-to-get "$KEY" \
   --query "Items[].$KEY.S" --output text | \
   tr "\t" "\n" | \
-  xargs -t -I keyvalue aws dynamodb delete-item --table-name $TABLE \
+  xargs -t -I keyvalue aws dynamodb delete-item --region eu-west-2 --table-name $TABLE \
   --key "{\"$KEY\": {\"S\": \"keyvalue\"}}"
   
 curl -X POST $API -H "Content-type: Application/JSON" -d '{"name":"wrench", "price":4}'
